@@ -13,6 +13,6 @@ public class GameObject {
 		this.height=height;
 	}
 	void Update () {
-		
+		bob
 	}
 }
