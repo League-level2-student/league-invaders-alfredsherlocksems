@@ -1,5 +1,6 @@
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 
 import javax.imageio.ImageIO;
@@ -28,6 +29,7 @@ public class Projectile extends GameObject {
 	}
 	void update() {
 		x+=speed;
+		super.update();
 	}
 	void loadImage(String imageFile) {
 	    if (needImage) {

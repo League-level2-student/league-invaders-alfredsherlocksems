@@ -19,6 +19,7 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 	 Timer frameDraw;
 	 Rocketship rocket = new Rocketship(100, 250, 50, 50);
 	 ObjectManager objectManager = new ObjectManager(rocket);
+	 Timer alienSpawn;
 	 
 	 GamePanel() {
 		 titleFont = new Font("Arial", Font.PLAIN, 48);
@@ -45,6 +46,9 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 	
 	void updateGameState() {
 		objectManager.update();
+		if (rocket.isActive=false) {
+			currentState=END;
+		}
 	}
 	
 	void updateEndState() {
@@ -97,40 +101,62 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 			if (currentState == END) {
 				currentState = MENU;
 			} 
-			else {
-				currentState++;
+			else if (currentState == MENU) {
+				currentState = GAME;
+				startGame();
+			}
+			else if (currentState == GAME) {
+				currentState = END;
 			}
 		}
 		if (currentState == GAME) {
 			if (arg0.getKeyCode() == KeyEvent.VK_UP) {
 				System.out.println("Up");
 				if (!(rocket.y < 0))
-				rocket.up();
+				rocket.up=true;
 			}
-			else if (arg0.getKeyCode() == KeyEvent.VK_DOWN) {
+			if (arg0.getKeyCode() == KeyEvent.VK_DOWN) {
 				System.out.println("Down");
 				if (!(rocket.y + rocket.height > 430)) {
-				rocket.down();
+				rocket.down=true;
 				}
 			}
-			else if (arg0.getKeyCode() == KeyEvent.VK_LEFT) {
+			if (arg0.getKeyCode() == KeyEvent.VK_LEFT) {
 				System.out.println("Left");
 				if (!(rocket.x < 0)) {
-				rocket.left();
+				rocket.left=true;
 				}
 			}
-			else if (arg0.getKeyCode() == KeyEvent.VK_RIGHT) {
+			if (arg0.getKeyCode() == KeyEvent.VK_RIGHT) {
 				System.out.println("Right");
 				if (!(rocket.x + rocket.width > 800)) {	
-					rocket.right();
+					rocket.right=true;
 				}
 			}
+			if (arg0.getKeyCode() == KeyEvent.VK_SPACE) {
+				objectManager.addProjectile(rocket.getProjectile());
+			}
 		}
+	}
+	void startGame() {
+		alienSpawn = new Timer(1000, objectManager);
+		alienSpawn.start();
 	}
 	@Override
 	public void keyReleased(KeyEvent arg0) {
 		// TODO Auto-generated method stub
-		
+		if (arg0.getKeyCode() == KeyEvent.VK_UP) {
+			rocket.up=false;
+		}
+		if (arg0.getKeyCode() == KeyEvent.VK_DOWN) {
+			rocket.down=false;
+		}
+		if (arg0.getKeyCode() == KeyEvent.VK_LEFT) {
+			rocket.left=false;
+		}
+		if (arg0.getKeyCode() == KeyEvent.VK_RIGHT) {
+			rocket.right=false;
+		}
 	}
 	@Override
 	public void keyTyped(KeyEvent arg0) {

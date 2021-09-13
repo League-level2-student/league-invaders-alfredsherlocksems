@@ -19,22 +19,25 @@ public class ObjectManager implements ActionListener{
 	}
 	
 	void addAlien () {
-		aliens.add(new Alien(ran.nextInt(LeagueInvadersRunner.HEIGHT), 0, 50, 50));
+		aliens.add(new Alien(800, ran.nextInt(LeagueInvadersRunner.HEIGHT), 50, 50));
 	}
 	
 	void update () {
+		rocket.move();
 		for (Alien a: aliens) {
-			update();
+			a.update();
 			if (a.x > LeagueInvadersRunner.WIDTH) {
 				a.isActive = false;
 			}
 		}
 		for (Projectile p: projectiles) {
-			update();
+			p.update();
 			if (p.x > LeagueInvadersRunner.WIDTH) {
 				p.isActive = false;
 			}
 		}
+		checkCollision();
+		purgeObjects();
 	}
 	
 	void draw (Graphics g) {
@@ -57,6 +60,20 @@ public class ObjectManager implements ActionListener{
 			if (projectiles.get(i).isActive = false) {
 				projectiles.remove(i);
 			}
+		}
+	}
+	void checkCollision() {
+		for (Projectile p: projectiles) {
+			for (Alien a: aliens) {
+				if (a.collisionBox.intersects(p.collisionBox)) {
+				a.isActive = false;
+				p.isActive = false;
+				}
+				if (a.collisionBox.intersects(rocket.collisionBox)) {
+				a.isActive=false;
+				rocket.isActive=false;
+				}
+			}	
 		}
 	}
 
